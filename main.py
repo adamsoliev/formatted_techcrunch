@@ -38,6 +38,8 @@ def formatted_print():
         print(f"{bcolors.OKBLUE}{_link}{bcolors.ENDC}")
         print("\n")
 
-#pp.pprint(posts[0])
-formatted_print()
+
+if __name__ == '__main__':
+    #pp.pprint(posts[0])
+    formatted_print()
 
