@@ -2,6 +2,7 @@
 
 import requests
 import pprint
+import time
 
 class bcolors:
     HEADER = '\033[95m'
@@ -23,7 +24,15 @@ res = requests.get(url)
 
 posts = res.json()
 
+def get_current_time():
+    seconds = time.time()
+    local_time = time.ctime(seconds)
+    formatted_local_time = str(local_time).replace(" ", "").replace(":", "")
+    return formatted_local_time
+
 def formatted_print():
+    # f.open(report_name)
+    # report_name = f"~/dev/formatted_techchrunch/reports/report.html"
     for i in range(0, len(posts)):
         post = posts[i]
 
@@ -33,13 +42,14 @@ def formatted_print():
         _link = post['link']
         _title = post['title']['rendered']
         _except = post['excerpt']['rendered']
-        print(_date)
-        print(_title)
+        _content = post['content']['rendered']
+        print(f"{_date} | {_title}")
         print(f"{bcolors.OKBLUE}{_link}{bcolors.ENDC}")
         print("\n")
 
 
 if __name__ == '__main__':
-    #pp.pprint(posts[0])
-    formatted_print()
+    # pp.pprint(posts[0])
+    get_current_time()
+    # formatted_print()
 
