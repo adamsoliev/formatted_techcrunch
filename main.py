@@ -3,6 +3,8 @@
 import requests
 import pprint
 import time
+from bs4 import BeautifulSoup
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -18,11 +20,15 @@ class bcolors:
 pp = pprint.PrettyPrinter(indent=2)
 
 
-url = 'https://techcrunch.com/wp-json/wp/v2/posts?after=2022-12-01%2000:00:00&page=2&_embed=true'
+def get_posts():
+    posts = []
+    for i in range(1, 4):
+        url = f'https://techcrunch.com/wp-json/wp/v2/posts?after=2022-12-01%2000:00:00&page={i}&_embed=true'
+        res = requests.get(url)
+        for post in res.json():
+            posts.append(post)
+    return posts
 
-res = requests.get(url)
-
-posts = res.json()
 
 def get_current_time():
     seconds = time.time()
@@ -30,7 +36,8 @@ def get_current_time():
     formatted_local_time = str(local_time).replace(" ", "").replace(":", "")
     return formatted_local_time
 
-def formatted_print():
+
+def formatted_print(posts):
     # f.open(report_name)
     # report_name = f"~/dev/formatted_techchrunch/reports/report.html"
     for i in range(0, len(posts)):
@@ -45,11 +52,15 @@ def formatted_print():
         _content = post['content']['rendered']
         print(f"{_date} | {_title}")
         print(f"{bcolors.OKBLUE}{_link}{bcolors.ENDC}")
+        soup = BeautifulSoup(_content, "lxml")
+        print(soup.get_text())
         print("\n")
 
 
 if __name__ == '__main__':
     # pp.pprint(posts[0])
-    get_current_time()
-    # formatted_print()
+    # cur_time = get_current_time()
+    posts = get_posts()
+    formatted_print(posts)
+
 
